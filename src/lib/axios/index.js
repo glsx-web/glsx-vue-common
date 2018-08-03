@@ -2,7 +2,7 @@
  * @Author: limin
  * @Date: 2018-06-25 10:28:18
  * @Last Modified by: limin
- * @Last Modified time: 2018-07-19 00:38:14
+ * @Last Modified time: 2018-08-03 10:24:05
  */
 import axios from 'axios'
 // import { ResInSession } from '@/utils/cache'
@@ -20,9 +20,7 @@ service.interceptors.request.use(config => {
     const token = GetSessionConfigByKey(AppConst.Auth.Token.Key)
     config.headers['X-Token'] = token
     const resources = GetSessionConfigByKey(AppConst.Auth.Resources.Key)
-    console.log(config.url)
     if (!whiteList.has(config.url) && resources && !resources.has(config.url)) {
-      console.log(222222222222222)
       // 拦截请求
       return Promise.reject({
         message: `${config.url} 无访问权限，请联管理员`

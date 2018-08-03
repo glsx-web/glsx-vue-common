@@ -5,7 +5,8 @@ import {
   directives,
   // GlRouter,
   GlAxios,
-  GlValidate
+  GlValidate,
+  GlStore
 } from '@/lib'
 import * as GlCommon from '@/common'
 const GlsxVueCommon = {}
@@ -24,6 +25,7 @@ export {
   GlConst,
   // GlRouter,
   GlValidate,
-  GlCommon
+  GlCommon,
+  GlStore
 }
 export default GlsxVueCommon

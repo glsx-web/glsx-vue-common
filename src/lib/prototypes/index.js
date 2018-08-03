@@ -2,6 +2,7 @@ import prototypes from './src/prototypes'
 import {
   SetConfig,
   GetConfig,
+  GetToken,
   SetConfigByKey,
   GetConfigByKey,
   GetSessionConfigByKey,
@@ -9,6 +10,7 @@ import {
   GetSessionConfig,
   SetSessionConfig,
   RemoveSessionConfig,
+  RemoveToken,
   RemoveConfig
 } from './src/prototypes'
 export default {
@@ -20,6 +22,7 @@ export {
   prototypes,
   SetConfig,
   GetConfig,
+  GetToken,
   SetConfigByKey,
   GetConfigByKey,
   GetSessionConfigByKey,
@@ -27,5 +30,6 @@ export {
   GetSessionConfig,
   SetSessionConfig,
   RemoveSessionConfig,
+  RemoveToken,
   RemoveConfig
 }

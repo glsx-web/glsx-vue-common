@@ -2,10 +2,13 @@
  * @Author: limin
  * @Date: 2018-06-25 10:28:09
  * @Last Modified by: limin
- * @Last Modified time: 2018-07-19 20:01:06
+ * @Last Modified time: 2018-08-02 09:44:45
  */
+import { setSession, getSession, removeSession, get, set, remove } from '@/common/src/storage'
+import * as Consts from '@/common/src/const'
+import { Postmate } from '@/common/src/postmate'
 import { AppConst } from '@/lib/consts'
-import { recursionGet, get, getSession, Consts, recursionSet, setSession, set, removeSession, remove, firstUpperCase } from '@/common'
+import { recursionGet, recursionSet, firstUpperCase } from '@/common'
 const GlHas = (res) => {
   let aRes = []
   let has = true
@@ -92,7 +95,27 @@ const GetToken = () => {
 const RemoveToken = () => {
   removeSession(Consts.TOKEN.KEY)
 }
-
+const SetSubLoaded = () => {
+  setSession(AppConst.Auth.SubLoaded.Key, AppConst.Auth.SubLoaded.Types.LOADED)
+}
+const SetSubUnLoaded = () => {
+  setSession(AppConst.Auth.SubLoaded.Key, AppConst.Auth.SubLoaded.Types.UNLOADED)
+}
+const GetMenus = (aResources, pid) => {
+  const _aResources = aResources || GetSessionConfigByKey(AppConst.Auth.Resources.Key)
+  var result = []
+  var temp
+  for (var key in _aResources) {
+    if (_aResources[key].pid === pid) {
+      result.push(_aResources[key])
+      temp = GetMenus(_aResources, _aResources[key].id)
+      if (temp.length > 0) {
+        _aResources[key].children = temp
+      }
+    }
+  }
+  return result
+}
 export default {
   install(Vue) {
     Vue.prototype.$Get = get
@@ -119,11 +142,17 @@ export default {
     Vue.prototype.$recursion_get = recursionGet
     Vue.prototype.$recursion_set = recursionSet
     Vue.prototype.$fist_uppercase = firstUpperCase
+    Vue.prototype.$set_sub_loaded = SetSubLoaded
+    Vue.prototype.$set_sub_unloaded = SetSubUnLoaded
+    Vue.prototype.$Postmate = Postmate
+    Vue.prototype.$get_menus = GetMenus
   }
 }
 export {
   SetConfig,
   GetConfig,
+  GetToken,
+  RemoveToken,
   SetConfigByKey,
   GetConfigByKey,
   GetSessionConfigByKey,
@@ -131,5 +160,9 @@ export {
   GetSessionConfig,
   SetSessionConfig,
   RemoveSessionConfig,
-  RemoveConfig
+  RemoveConfig,
+  SetSubLoaded,
+  SetSubUnLoaded,
+  Postmate,
+  GetMenus
 }

@@ -2,13 +2,15 @@
  * @Author: limin
  * @Date: 2018-06-23 11:57:23
  * @Last Modified by: limin
- * @Last Modified time: 2018-07-18 23:27:01
+ * @Last Modified time: 2018-08-02 09:45:13
  */
+import { GenerateTitle } from './src/i18n'
 import { setSession, getSession, removeSession, get, set, remove } from './src/storage'
-import * as Consts from './src/const'
 import {
   SetConfig,
   GetConfig,
+  GetToken,
+  RemoveToken,
   SetConfigByKey,
   GetConfigByKey,
   GetSessionConfigByKey,
@@ -16,7 +18,11 @@ import {
   GetSessionConfig,
   SetSessionConfig,
   RemoveSessionConfig,
-  RemoveConfig } from '@/lib/prototypes'
+  RemoveConfig,
+  SetSubLoaded,
+  SetSubUnLoaded,
+  Postmate,
+  GetMenus } from '@/lib/prototypes'
 /**
  * 给对象  key包含的属性赋值 key 描述一个对象属性
  * 如 对象为obj
@@ -44,19 +50,6 @@ const recursionGet = (obj, key) => {
   }
 }
 const firstUpperCase = (str) => str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
-// const setConfig = function(obj, parent, callback) {
-//   for (var o in obj) {
-//     if (isJson(obj[o])) {
-//       setConfig(obj[o], parent + '_' + o)
-//     } else {
-//       callback && callback(parent + '_' + o, obj[o])
-//     }
-//   }
-// }
-// const isJson = function(obj) {
-//   var isjson = typeof (obj) === 'object' && Object.prototype.toString.call(obj).toLowerCase() === '[object object]' && !obj.length
-//   return isjson
-// }
 export {
   setSession,
   getSession,
@@ -64,12 +57,13 @@ export {
   remove,
   get,
   set,
-  Consts,
   recursionGet,
   recursionSet,
   firstUpperCase,
   SetConfig,
   GetConfig,
+  GetToken,
+  RemoveToken,
   SetConfigByKey,
   GetConfigByKey,
   GetSessionConfigByKey,
@@ -77,5 +71,10 @@ export {
   GetSessionConfig,
   SetSessionConfig,
   RemoveSessionConfig,
-  RemoveConfig
+  RemoveConfig,
+  GenerateTitle,
+  SetSubLoaded,
+  SetSubUnLoaded,
+  Postmate,
+  GetMenus
 }
