@@ -2,7 +2,7 @@
  * @Author: limin
  * @Date: 2018-06-23 11:57:23
  * @Last Modified by: limin
- * @Last Modified time: 2018-08-02 09:45:13
+ * @Last Modified time: 2018-08-10 22:49:39
  */
 import { GenerateTitle } from './src/i18n'
 import { setSession, getSession, removeSession, get, set, remove } from './src/storage'
@@ -19,10 +19,12 @@ import {
   SetSessionConfig,
   RemoveSessionConfig,
   RemoveConfig,
-  SetSubLoaded,
-  SetSubUnLoaded,
-  Postmate,
-  GetMenus } from '@/lib/prototypes'
+  GetMenus,
+  Penpal,
+  _
+} from '@/lib/prototypes'
+import uuid from 'uuid/v1'
+
 /**
  * 给对象  key包含的属性赋值 key 描述一个对象属性
  * 如 对象为obj
@@ -50,6 +52,23 @@ const recursionGet = (obj, key) => {
   }
 }
 const firstUpperCase = (str) => str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
+
+const debounce = (func, wait, immediate) => {
+  let timeout
+  return function() {
+    const context = this
+    const args = arguments
+    const later = function() {
+      timeout = null
+      if (!immediate) func.apply(context, args)
+    }
+    const callNow = immediate && !timeout
+    clearTimeout(timeout)
+    timeout = setTimeout(later, wait)
+    if (callNow) func.apply(context, args)
+  }
+}
+
 export {
   setSession,
   getSession,
@@ -73,8 +92,9 @@ export {
   RemoveSessionConfig,
   RemoveConfig,
   GenerateTitle,
-  SetSubLoaded,
-  SetSubUnLoaded,
-  Postmate,
-  GetMenus
+  GetMenus,
+  debounce,
+  uuid,
+  Penpal,
+  _
 }

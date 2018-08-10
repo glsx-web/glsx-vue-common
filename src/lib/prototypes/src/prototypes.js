@@ -2,13 +2,14 @@
  * @Author: limin
  * @Date: 2018-06-25 10:28:09
  * @Last Modified by: limin
- * @Last Modified time: 2018-08-02 09:44:45
+ * @Last Modified time: 2018-08-10 22:49:16
  */
 import { setSession, getSession, removeSession, get, set, remove } from '@/common/src/storage'
 import * as Consts from '@/common/src/const'
-import { Postmate } from '@/common/src/postmate'
+import Penpal from '@/common/src/penpal'
 import { AppConst } from '@/lib/consts'
 import { recursionGet, recursionSet, firstUpperCase } from '@/common'
+import _ from 'lodash'
 const GlHas = (res) => {
   let aRes = []
   let has = true
@@ -85,32 +86,25 @@ const RemoveConfig = () => {
 }
 
 const SetToken = (token) => {
-  setSession(Consts.TOKEN.KEY, token)
+  SetSessionConfigByKey(AppConst.Auth.Token.KEY, token)
 }
 
 const GetToken = () => {
-  return getSession(Consts.TOKEN.KEY)
+  return GetSessionConfigByKey(AppConst.Auth.Token.KEY)
 }
 
 const RemoveToken = () => {
-  removeSession(Consts.TOKEN.KEY)
+  removeSession(AppConst.Auth.Token.KEY)
 }
-const SetSubLoaded = () => {
-  setSession(AppConst.Auth.SubLoaded.Key, AppConst.Auth.SubLoaded.Types.LOADED)
-}
-const SetSubUnLoaded = () => {
-  setSession(AppConst.Auth.SubLoaded.Key, AppConst.Auth.SubLoaded.Types.UNLOADED)
-}
-const GetMenus = (aResources, pid) => {
-  const _aResources = aResources || GetSessionConfigByKey(AppConst.Auth.Resources.Key)
+const GetMenus = (aResources = GetSessionConfigByKey(AppConst.Auth.Resources.Key), pid) => {
   var result = []
   var temp
-  for (var key in _aResources) {
-    if (_aResources[key].pid === pid) {
-      result.push(_aResources[key])
-      temp = GetMenus(_aResources, _aResources[key].id)
+  for (var key in aResources) {
+    if (aResources[key].pid === pid) {
+      result.push(aResources[key])
+      temp = GetMenus(aResources, aResources[key].id)
       if (temp.length > 0) {
-        _aResources[key].children = temp
+        aResources[key].children = temp
       }
     }
   }
@@ -142,10 +136,9 @@ export default {
     Vue.prototype.$recursion_get = recursionGet
     Vue.prototype.$recursion_set = recursionSet
     Vue.prototype.$fist_uppercase = firstUpperCase
-    Vue.prototype.$set_sub_loaded = SetSubLoaded
-    Vue.prototype.$set_sub_unloaded = SetSubUnLoaded
-    Vue.prototype.$Postmate = Postmate
     Vue.prototype.$get_menus = GetMenus
+    Vue.prototype.$Penpal = Penpal
+    Vue.prototype.$_ = _
   }
 }
 export {
@@ -161,8 +154,7 @@ export {
   SetSessionConfig,
   RemoveSessionConfig,
   RemoveConfig,
-  SetSubLoaded,
-  SetSubUnLoaded,
-  Postmate,
-  GetMenus
+  GetMenus,
+  Penpal,
+  _
 }
