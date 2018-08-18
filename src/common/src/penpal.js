@@ -305,7 +305,7 @@ const connectCallReceiver = (info, methods, destructionPromise) => {
  * for the child to respond before rejecting the connection promise.
  * @return {Child}
  */
-Penpal.connectToChild = ({ url, appendTo, methods = {}, timeout }) => {
+Penpal.connectToChild = ({ url, appendTo = document.body, methods = {}, timeout, source, style }) => {
   let destroy
   const connectionDestructionPromise = new DestructionPromise(
     (resolveConnectionDestructionPromise) => {
@@ -314,9 +314,12 @@ Penpal.connectToChild = ({ url, appendTo, methods = {}, timeout }) => {
   )
 
   const parent = window
-  const iframe = document.createElement('iframe');
+  const iframe = document.createElement('iframe')
+  if (typeof (appendTo) === 'string') {
+    appendTo = document.querySelector(appendTo)
+  }
   //   iframe.scrolling = 'no';
-  (appendTo || document.body).appendChild(iframe)
+  appendTo.appendChild(iframe)
 
   connectionDestructionPromise.then(() => {
     if (iframe.parentNode) {
@@ -407,11 +410,17 @@ Penpal.connectToChild = ({ url, appendTo, methods = {}, timeout }) => {
 
     log('Parent: Loading iframe')
     iframe.src = url
+    iframe.setAttribute('id', `iframe_${source.id}`)
+    // iframe.style.display = 'none'
+    // position: absolute;background: #fff;
+    iframe.setAttribute('style', style)
+    // iframe.setAttribute('v-show', `activeName==${source.id}`)
   })
 
   return {
     promise,
     iframe,
+    source,
     destroy
   }
 }

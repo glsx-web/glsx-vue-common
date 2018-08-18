@@ -3,10 +3,8 @@ import {
   prototypes,
   GlConst,
   directives,
-  // GlRouter,
   GlAxios,
-  GlValidate,
-  GlStore
+  GlValidate
 } from '@/lib'
 import * as GlCommon from '@/common'
 const GlsxVueCommon = {}
@@ -23,9 +21,7 @@ export {
   GlsxVueCommon,
   GlAxios,
   GlConst,
-  // GlRouter,
   GlValidate,
-  GlCommon,
-  GlStore
+  GlCommon
 }
 export default GlsxVueCommon

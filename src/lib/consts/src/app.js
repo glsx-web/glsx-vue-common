@@ -4,9 +4,12 @@ export default {
     CLOSE: 1,
     OPEN: 2
   },
+  MainVisible: {
+    Key: 'app_mainVisible'
+  },
   Visibility: {
-    HIDDEN: 1,
-    VISIBLE: 2
+    HIDDEN: false,
+    VISIBLE: true
   },
   Device: {
     Key: 'app_device',

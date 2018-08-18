@@ -2,11 +2,12 @@
  * @Author: limin
  * @Date: 2018-06-25 10:28:09
  * @Last Modified by: limin
- * @Last Modified time: 2018-08-10 22:49:16
+ * @Last Modified time: 2018-08-18 17:40:54
  */
 import { setSession, getSession, removeSession, get, set, remove } from '@/common/src/storage'
 import * as Consts from '@/common/src/const'
 import Penpal from '@/common/src/penpal'
+import Theme from '@/common/src/theme'
 import { AppConst } from '@/lib/consts'
 import { recursionGet, recursionSet, firstUpperCase } from '@/common'
 import _ from 'lodash'
@@ -41,6 +42,7 @@ const SetConfigByKey = (key, value) => {
 const GetConfigByKey = (key) => {
   if (!key) throw new Error('no key')
   const configLocal = get(Consts.LOCAL_CONFIG.KEY)
+  if (!configLocal) return null
   return recursionGet(configLocal, key)
 }
 
@@ -55,9 +57,14 @@ const SetConfig = (objConfig) => {
   return cfg
 }
 
+const CoverConfig = (objConfig) => {
+  set(Consts.LOCAL_CONFIG.KEY, objConfig)
+}
+
 const GetSessionConfigByKey = (key) => {
   if (!key) throw new Error('no key')
   const configSession = getSession(Consts.SESSION_CONFIG.KEY) || {}
+  if (!configSession) return null
   var result = recursionGet(configSession, key)
   return result
 }
@@ -67,6 +74,7 @@ const SetSessionConfigByKey = (key, value) => {
   const configSession = getSession(Consts.SESSION_CONFIG.KEY) || {}
   recursionSet(configSession, key, value)
   setSession(Consts.SESSION_CONFIG.KEY, configSession)
+  return configSession
 }
 
 const SetSessionConfig = (objConfig) => {
@@ -121,6 +129,7 @@ export default {
     Vue.prototype.$gl_has = GlHas
     Vue.prototype.$get_config = GetConfig
     Vue.prototype.$set_config = SetConfig
+    Vue.prototype.$cover_config = CoverConfig
     Vue.prototype.$get_session_config = GetSessionConfig
     Vue.prototype.$set_session_config = SetSessionConfig
     Vue.prototype.$remove_session_config = RemoveSessionConfig
@@ -138,6 +147,7 @@ export default {
     Vue.prototype.$fist_uppercase = firstUpperCase
     Vue.prototype.$get_menus = GetMenus
     Vue.prototype.$Penpal = Penpal
+    Vue.prototype.$Theme = Theme
     Vue.prototype.$_ = _
   }
 }
