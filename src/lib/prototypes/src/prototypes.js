@@ -2,15 +2,15 @@
  * @Author: limin
  * @Date: 2018-06-25 10:28:09
  * @Last Modified by: limin
- * @Last Modified time: 2018-08-18 17:40:54
+ * @Last Modified time: 2018-08-21 11:12:51
  */
 import { setSession, getSession, removeSession, get, set, remove } from '@/common/src/storage'
 import * as Consts from '@/common/src/const'
 import Penpal from '@/common/src/penpal'
 import Theme from '@/common/src/theme'
 import { AppConst } from '@/lib/consts'
-import { recursionGet, recursionSet, firstUpperCase } from '@/common'
-import _ from 'lodash'
+import { recursionGet, recursionSet, firstUpperCase, merge, deepClone, dropWhile, debounce } from '@/common/src/functions'
+// import _ from 'lodash'
 const GlHas = (res) => {
   let aRes = []
   let has = true
@@ -37,6 +37,7 @@ const SetConfigByKey = (key, value) => {
   const configLocal = get(Consts.LOCAL_CONFIG.KEY) || {}
   recursionSet(configLocal, key, value)
   set(Consts.LOCAL_CONFIG.KEY, configLocal)
+  return configLocal
 }
 
 const GetConfigByKey = (key) => {
@@ -94,15 +95,21 @@ const RemoveConfig = () => {
 }
 
 const SetToken = (token) => {
-  SetSessionConfigByKey(AppConst.Auth.Token.KEY, token)
+  SetConfigByKey(AppConst.Auth.Token.KEY, token)
 }
 
 const GetToken = () => {
-  return GetSessionConfigByKey(AppConst.Auth.Token.KEY)
+  return GetConfigByKey(AppConst.Auth.Token.KEY)
 }
 
 const RemoveToken = () => {
   removeSession(AppConst.Auth.Token.KEY)
+}
+const RemoveAuth = (config = get(Consts.LOCAL_CONFIG.KEY)) => {
+  delete config.app.auth
+  delete config.app.axios
+  set(Consts.LOCAL_CONFIG.KEY, config)
+  return config
 }
 const GetMenus = (aResources = GetSessionConfigByKey(AppConst.Auth.Resources.Key), pid) => {
   var result = []
@@ -126,6 +133,7 @@ export default {
     Vue.prototype.$get_session = getSession
     Vue.prototype.$Remove = remove
     Vue.prototype.$remove_session = removeSession
+    Vue.prototype.$remove_auth = RemoveAuth
     Vue.prototype.$gl_has = GlHas
     Vue.prototype.$get_config = GetConfig
     Vue.prototype.$set_config = SetConfig
@@ -144,11 +152,15 @@ export default {
     Vue.prototype.$remove_token = RemoveToken
     Vue.prototype.$recursion_get = recursionGet
     Vue.prototype.$recursion_set = recursionSet
-    Vue.prototype.$fist_uppercase = firstUpperCase
+    Vue.prototype.$first_uppercase = firstUpperCase
     Vue.prototype.$get_menus = GetMenus
     Vue.prototype.$Penpal = Penpal
     Vue.prototype.$Theme = Theme
-    Vue.prototype.$_ = _
+    Vue.prototype.$merge = merge
+    Vue.prototype.$deep_clone = deepClone
+    Vue.prototype.$drop_while = dropWhile
+    Vue.prototype.$debounce = debounce
+    // Vue.prototype.$_ = _
   }
 }
 export {
@@ -165,6 +177,6 @@ export {
   RemoveSessionConfig,
   RemoveConfig,
   GetMenus,
-  Penpal,
-  _
+  Penpal
+  // _
 }

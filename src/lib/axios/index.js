@@ -2,7 +2,7 @@
  * @Author: limin
  * @Date: 2018-06-25 10:28:18
  * @Last Modified by: limin
- * @Last Modified time: 2018-08-17 21:17:58
+ * @Last Modified time: 2018-08-21 09:45:13
  */
 import axios from 'axios'
 // import { ResInSession } from '@/utils/cache'
@@ -13,14 +13,14 @@ const service = axios.create()
 // request拦截器
 service.interceptors.request.use(config => {
   try {
-    const whiteList = new Set(GetSessionConfigByKey(AppConst.Axios.WhiteList.Key))
+    const whiteList = GetSessionConfigByKey(AppConst.Axios.WhiteList.Key)
     config.baseURL = GetSessionConfigByKey(AppConst.Axios.BaseURL.Key)
     config.timeout = GetSessionConfigByKey(AppConst.Axios.Timeout.Key)
     // config.headers['X-Token'] = getToken() // 让每个请求携带自定义token
     const token = GetSessionConfigByKey(AppConst.Auth.Token.Key)
     config.headers['X-Token'] = token
-    const resources = GetSessionConfigByKey(AppConst.Auth.Resources.Key)
-    if (!whiteList.has(config.url) && resources && !resources.has(config.url)) {
+    // const resources = GetConfigByKey(AppConst.Auth.Resources.Key) //TODO URL鉴权
+    if (!whiteList.some(url => url === config.url)) {
       // 拦截请求
       return Promise.reject({
         message: `${config.url} 无访问权限，请联管理员`
