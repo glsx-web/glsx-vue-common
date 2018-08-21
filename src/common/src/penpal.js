@@ -305,7 +305,7 @@ const connectCallReceiver = (info, methods, destructionPromise) => {
  * for the child to respond before rejecting the connection promise.
  * @return {Child}
  */
-Penpal.connectToChild = ({ url, appendTo = document.body, methods = {}, timeout, source, style }) => {
+Penpal.connectToChild = ({ url, appendTo = document.body, methods = {}, timeout, source, style, className }) => {
   let destroy
   const connectionDestructionPromise = new DestructionPromise(
     (resolveConnectionDestructionPromise) => {
@@ -402,7 +402,6 @@ Penpal.connectToChild = ({ url, appendTo = document.body, methods = {}, timeout,
     parent.addEventListener(MESSAGE, handleMessage)
     connectionDestructionPromise.then(() => {
       parent.removeEventListener(MESSAGE, handleMessage)
-
       const error = new Error('Connection destroyed')
       error.code = ERR_CONNECTION_DESTROYED
       reject(error)
@@ -411,10 +410,8 @@ Penpal.connectToChild = ({ url, appendTo = document.body, methods = {}, timeout,
     log('Parent: Loading iframe')
     iframe.src = url
     iframe.setAttribute('id', `iframe_${source.id}`)
-    // iframe.style.display = 'none'
-    // position: absolute;background: #fff;
-    iframe.setAttribute('style', style)
-    // iframe.setAttribute('v-show', `activeName==${source.id}`)
+    style && iframe.setAttribute('style', style)
+    className && (iframe.className = className)
   })
 
   return {
