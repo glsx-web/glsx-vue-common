@@ -2,7 +2,7 @@
  * @Author: limin
  * @Date: 2018-08-12 12:52:19
  * @Last Modified by: limin
- * @Last Modified time: 2018-08-12 14:19:10
+ * @Last Modified time: 2018-08-23 18:28:01
  */
 const Theme = (version = '2.4.0', defaultColor = '#409EFF') => {
   this.default_color = defaultColor

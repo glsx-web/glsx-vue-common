@@ -42,6 +42,14 @@ export function debounce(func, wait, immediate) {
   }
 }
 
+/**
+ * 合并json对象 以后者(obj) 覆盖 前者(def)
+ * 例:
+ * def={foo:1,bar:2} obj={foo:2}
+ * merge(def,obj): {foo:2,bar:2}
+ * @param {*} def
+ * @param {*} obj
+ */
 export const merge = (def, obj) => {
   if (!obj) {
     return def
@@ -77,7 +85,7 @@ export const merge = (def, obj) => {
       } else {
         for (let x = 0; x < obj[i].length; x++) {
           var idxObj = obj[i][x]
-          if (def[i].indexOf(idxObj) === -1) {
+          if (def[i] && def[i].indexOf(idxObj) === -1) {
             def[i].push(idxObj)
           }
         }
@@ -89,6 +97,12 @@ export const merge = (def, obj) => {
   return def
 }
 
+/**
+ * 深克隆 所有原型链上的对象和属性
+ * 例: const bar=deepClone(foo)
+ * console.log(bar===foo) false
+ * @param {*} obj
+ */
 export const deepClone = (obj) => {
   // Handle the 3 simple types, and null or undefined or function
   if (obj == null || typeof obj !== 'object') return obj
@@ -109,6 +123,11 @@ export const deepClone = (obj) => {
   throw new Error("Unable to clone obj! Its type isn't supported.")
 }
 
+/**
+ * 删除数组中 key 为value 的选项
+ * @param {*} array
+ * @param {*} param1
+ */
 export const dropWhile = (array, [key, value]) => {
   for (var i = 0, j = array.length; i < j; i++) {
     if (array[i][key] === value) {
@@ -117,4 +136,31 @@ export const dropWhile = (array, [key, value]) => {
     }
   }
   return array
+}
+
+/**
+ * 16进制颜色值 转换为 rgb
+ * @param {*} sColor  16进制颜色值
+ * @param {*} alpha 透明度
+ */
+export const colorToRgb = (sColor, alpha) => {
+  var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/
+  sColor = sColor.toLowerCase()
+  if (sColor && reg.test(sColor)) {
+    if (sColor.length === 4) {
+      var sColorNew = '#'
+      for (var i = 1; i < 4; i += 1) {
+        sColorNew += sColor.slice(i, i + 1).concat(sColor.slice(i, i + 1))
+      }
+      sColor = sColorNew
+    }
+    // 处理六位的颜色值
+    var sColorChange = []
+    for (let i = 1; i < 7; i += 2) {
+      sColorChange.push(parseInt('0x' + sColor.slice(i, i + 2)))
+    }
+    return `RGB(${sColorChange.join(',') + (alpha ? (',' + alpha) : '')})`
+  } else {
+    return sColor
+  }
 }

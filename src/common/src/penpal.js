@@ -409,7 +409,7 @@ Penpal.connectToChild = ({ url, appendTo = document.body, methods = {}, timeout,
 
     log('Parent: Loading iframe')
     iframe.src = url
-    iframe.setAttribute('id', `iframe_${source.id}`)
+    iframe.setAttribute('id', `child_iframe_${source.id}`)
     style && iframe.setAttribute('style', style)
     className && (iframe.className = className)
   })

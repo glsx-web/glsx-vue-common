@@ -2,14 +2,14 @@
  * @Author: limin
  * @Date: 2018-06-25 10:28:09
  * @Last Modified by: limin
- * @Last Modified time: 2018-08-21 11:12:51
+ * @Last Modified time: 2018-08-28 11:07:22
  */
 import { setSession, getSession, removeSession, get, set, remove } from '@/common/src/storage'
 import * as Consts from '@/common/src/const'
 import Penpal from '@/common/src/penpal'
 import Theme from '@/common/src/theme'
 import { AppConst } from '@/lib/consts'
-import { recursionGet, recursionSet, firstUpperCase, merge, deepClone, dropWhile, debounce } from '@/common/src/functions'
+import { recursionGet, recursionSet, firstUpperCase, merge, deepClone, dropWhile, debounce, colorToRgb } from '@/common/src/functions'
 // import _ from 'lodash'
 const GlHas = (res) => {
   let aRes = []
@@ -111,6 +111,11 @@ const RemoveAuth = (config = get(Consts.LOCAL_CONFIG.KEY)) => {
   set(Consts.LOCAL_CONFIG.KEY, config)
   return config
 }
+/**
+ * 根据父id 获取菜单列表
+ * @param {*} aResources 权限资源
+ * @param {*} pid  父id
+ */
 const GetMenus = (aResources = GetSessionConfigByKey(AppConst.Auth.Resources.Key), pid) => {
   var result = []
   var temp
@@ -160,7 +165,7 @@ export default {
     Vue.prototype.$deep_clone = deepClone
     Vue.prototype.$drop_while = dropWhile
     Vue.prototype.$debounce = debounce
-    // Vue.prototype.$_ = _
+    Vue.prototype.$color_to_rgb = colorToRgb
   }
 }
 export {
@@ -178,5 +183,4 @@ export {
   RemoveConfig,
   GetMenus,
   Penpal
-  // _
 }
