@@ -318,6 +318,7 @@ Penpal.connectToChild = ({ url, appendTo = document.body, methods = {}, timeout,
   if (typeof (appendTo) === 'string') {
     appendTo = document.querySelector(appendTo)
   }
+  if (!appendTo) { log('Parent: no container'); return }
   //   iframe.scrolling = 'no';
   appendTo.appendChild(iframe)
 
