@@ -2,23 +2,28 @@
  * @Author: limin
  * @Date: 2018-06-25 10:28:18
  * @Last Modified by: limin
- * @Last Modified time: 2018-08-21 09:45:13
+ * @Last Modified time: 2018-08-30 04:06:26
  */
 import axios from 'axios'
 // import { ResInSession } from '@/utils/cache'
 import { AppConst } from '@/lib/consts'
 import { GetSessionConfigByKey } from '@/lib/prototypes'
+axios.defaults.withCredentials = true
+import qs from 'qs'
 // 创建axios实例
-const service = axios.create()
+const service = axios.create({
+  // baseURL: GetSessionConfigByKey(AppConst.Axios.BaseURL.Key),
+  // timeout: GetSessionConfigByKey(AppConst.Axios.Timeout.Key)
+})
 // request拦截器
 service.interceptors.request.use(config => {
   try {
     const whiteList = GetSessionConfigByKey(AppConst.Axios.WhiteList.Key)
     config.baseURL = GetSessionConfigByKey(AppConst.Axios.BaseURL.Key)
     config.timeout = GetSessionConfigByKey(AppConst.Axios.Timeout.Key)
-    // config.headers['X-Token'] = getToken() // 让每个请求携带自定义token
-    const token = GetSessionConfigByKey(AppConst.Auth.Token.Key)
-    config.headers['X-Token'] = token
+    config.transformRequest = [function(data) {
+      return qs.stringify(data)
+    }]
     // const resources = GetConfigByKey(AppConst.Auth.Resources.Key) //TODO URL鉴权
     if (!whiteList.some(url => url === config.url)) {
       // 拦截请求
@@ -27,13 +32,10 @@ service.interceptors.request.use(config => {
       })
     }
   } catch (error) {
-    console.log(error)
     return Promise.reject(error)
   }
   return config
 }, error => {
-  // Do something with request error
-  console.log(error) // for debug
   return Promise.reject(error)
 })
 
@@ -44,7 +46,7 @@ service.interceptors.response.use(
   * code为非20000是抛错 可结合自己业务进行修改
   */
     const res = response.data
-    if (res.code !== 20000) {
+    if (+res.returnCode !== 0) {
       // Message({
       //   message: res.message,
       //   type: 'error',

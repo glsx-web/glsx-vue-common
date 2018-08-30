@@ -2,7 +2,7 @@
  * @Author: limin
  * @Date: 2018-06-23 11:13:44
  * @Last Modified by: limin
- * @Last Modified time: 2018-08-21 12:07:40
+ * @Last Modified time: 2018-08-29 16:50:40
  */
 const TYPE = {
   LOCAL: 'localStorage',
