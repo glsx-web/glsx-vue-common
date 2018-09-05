@@ -2,7 +2,7 @@
  * @Author: limin
  * @Date: 2018-06-25 10:28:09
  * @Last Modified by: limin
- * @Last Modified time: 2018-08-28 11:07:22
+ * @Last Modified time: 2018-08-31 11:31:43
  */
 import { setSession, getSession, removeSession, get, set, remove } from '@/common/src/storage'
 import * as Consts from '@/common/src/const'
@@ -10,7 +10,7 @@ import Penpal from '@/common/src/penpal'
 import Theme from '@/common/src/theme'
 import { AppConst } from '@/lib/consts'
 import { recursionGet, recursionSet, firstUpperCase, merge, deepClone, dropWhile, debounce, colorToRgb } from '@/common/src/functions'
-// import _ from 'lodash'
+
 const GlHas = (res) => {
   let aRes = []
   let has = true
@@ -80,6 +80,13 @@ const SetSessionConfigByKey = (key, value) => {
 
 const SetSessionConfig = (objConfig) => {
   setSession(Consts.SESSION_CONFIG.KEY, objConfig)
+}
+
+const SetCommonConfig = (objConfig) => {
+  setSession(Consts.COMMON_COFIG.KEY, objConfig)
+}
+const GetCommonConfig = () => {
+  return getSession(Consts.COMMON_COFIG.KEY)
 }
 
 const GetSessionConfig = () => {
@@ -179,6 +186,8 @@ export {
   SetSessionConfigByKey,
   GetSessionConfig,
   SetSessionConfig,
+  SetCommonConfig,
+  GetCommonConfig,
   RemoveSessionConfig,
   RemoveConfig,
   GetMenus,

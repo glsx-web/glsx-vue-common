@@ -2,7 +2,7 @@
  * @Author: limin
  * @Date: 2018-06-25 10:29:52
  * @Last Modified by: limin
- * @Last Modified time: 2018-07-19 19:08:20
+ * @Last Modified time: 2018-08-31 10:12:56
  */
 export const SESSION_CONFIG_HEADER = {
   KEY: 'session_config_header'
@@ -19,6 +19,6 @@ export const SESSION_CONFIG = {
 export const LOCAL_CONFIG = {
   KEY: 'local_config'
 }
-export const TOKEN = {
-  KEY: 'token'
+export const COMMON_COFIG = {
+  KEY: 'session_common_config'
 }

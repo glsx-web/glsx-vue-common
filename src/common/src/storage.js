@@ -2,7 +2,7 @@
  * @Author: limin
  * @Date: 2018-06-23 11:13:44
  * @Last Modified by: limin
- * @Last Modified time: 2018-08-29 16:50:40
+ * @Last Modified time: 2018-08-31 18:28:26
  */
 const TYPE = {
   LOCAL: 'localStorage',
@@ -18,6 +18,9 @@ export function set(key, val, type = TYPE.LOCAL) {
 export function get(key, type = TYPE.LOCAL) {
   var val = window[type].getItem(key)
   try {
+    if (val && val.startsWith('#')) {
+      return val
+    }
     const value = JSON.parse(val)
     return (value)
   } catch (e) {

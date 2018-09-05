@@ -9,6 +9,8 @@ import {
   SetSessionConfigByKey,
   GetSessionConfig,
   SetSessionConfig,
+  SetCommonConfig,
+  GetCommonConfig,
   RemoveSessionConfig,
   RemoveToken,
   RemoveConfig
@@ -29,6 +31,8 @@ export {
   SetSessionConfigByKey,
   GetSessionConfig,
   SetSessionConfig,
+  SetCommonConfig,
+  GetCommonConfig,
   RemoveSessionConfig,
   RemoveToken,
   RemoveConfig
