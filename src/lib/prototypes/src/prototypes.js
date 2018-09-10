@@ -2,7 +2,7 @@
  * @Author: limin
  * @Date: 2018-06-25 10:28:09
  * @Last Modified by: limin
- * @Last Modified time: 2018-08-31 11:31:43
+ * @Last Modified time: 2018-09-10 15:02:17
  */
 import { setSession, getSession, removeSession, get, set, remove } from '@/common/src/storage'
 import * as Consts from '@/common/src/const'
@@ -123,11 +123,11 @@ const RemoveAuth = (config = get(Consts.LOCAL_CONFIG.KEY)) => {
  * @param {*} aResources 权限资源
  * @param {*} pid  父id
  */
-const GetMenus = (aResources = GetSessionConfigByKey(AppConst.Auth.Resources.Key), pid) => {
+const GetMenus = (aResources = GetSessionConfigByKey(AppConst.Auth.Resources.Key), parentId) => {
   var result = []
   var temp
   for (var key in aResources) {
-    if (aResources[key].pid === pid) {
+    if (aResources[key].parentId === parentId) {
       result.push(aResources[key])
       temp = GetMenus(aResources, aResources[key].id)
       if (temp.length > 0) {
