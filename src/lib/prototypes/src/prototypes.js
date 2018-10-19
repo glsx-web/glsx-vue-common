@@ -2,13 +2,14 @@
  * @Author: limin
  * @Date: 2018-06-25 10:28:09
  * @Last Modified by: limin
- * @Last Modified time: 2018-09-10 15:02:17
+ * @Last Modified time: 2018-09-30 10:25:43
  */
 import { setSession, getSession, removeSession, get, set, remove } from '@/common/src/storage'
 import * as Consts from '@/common/src/const'
 import Penpal from '@/common/src/penpal'
 import Theme from '@/common/src/theme'
 import { AppConst } from '@/lib/consts'
+import GlAxios from '@/lib/axios'
 import { recursionGet, recursionSet, firstUpperCase, merge, deepClone, dropWhile, debounce, colorToRgb } from '@/common/src/functions'
 
 const GlHas = (res) => {
@@ -118,16 +119,19 @@ const RemoveAuth = (config = get(Consts.LOCAL_CONFIG.KEY)) => {
   set(Consts.LOCAL_CONFIG.KEY, config)
   return config
 }
+const ClientHeight = () => {
+  return document.height || document.body.offsetHeight
+}
 /**
  * 根据父id 获取菜单列表
  * @param {*} aResources 权限资源
  * @param {*} pid  父id
  */
-const GetMenus = (aResources = GetSessionConfigByKey(AppConst.Auth.Resources.Key), parentId) => {
+const GetMenus = (aResources = GetSessionConfigByKey(AppConst.Auth.Resources.Key), parentId, parentName) => {
   var result = []
   var temp
   for (var key in aResources) {
-    if (aResources[key].parentId === parentId) {
+    if (aResources[key][parentName || 'parentId'] === parentId) {
       result.push(aResources[key])
       temp = GetMenus(aResources, aResources[key].id)
       if (temp.length > 0) {
@@ -173,6 +177,8 @@ export default {
     Vue.prototype.$drop_while = dropWhile
     Vue.prototype.$debounce = debounce
     Vue.prototype.$color_to_rgb = colorToRgb
+    Vue.prototype.$client_height = ClientHeight
+    Vue.prototype.$http = GlAxios
   }
 }
 export {
