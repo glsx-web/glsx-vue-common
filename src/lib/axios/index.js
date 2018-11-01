@@ -2,7 +2,7 @@
  * @Author: limin
  * @Date: 2018-06-25 10:28:18
  * @Last Modified by: limin
- * @Last Modified time: 2018-10-19 10:31:26
+ * @Last Modified time: 2018-10-29 17:13:01
  */
 import axios from 'axios'
 // import { ResInSession } from '@/utils/cache'
@@ -46,9 +46,10 @@ service.interceptors.response.use(
     const { result } = configFactory().axios
     const res = response.data
     const code = res[result.code_key || 'returnCode'] // 返回值状态码
+    const errId = res[result.errId || 'errId']
     if (+code !== +result.code_success_value) { // 比对配置的成功状态码与返回状态码 如果不成功 则读取配置的错误信息映射
       const cmm = result.code_message_map
-      const msg = res[result.message_key || 'message'] || cmm[code] || '返回错误'
+      const msg = cmm[errId] || cmm[code] || res[result.message_key || 'message'] || '返回错误'
       return Promise.reject(msg)
     } else { // 成功 则返回成功消息体
       return res[result.data_key || 'data']
