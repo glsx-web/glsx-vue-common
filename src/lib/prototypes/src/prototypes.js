@@ -2,7 +2,7 @@
  * @Author: limin
  * @Date: 2018-06-25 10:28:09
  * @Last Modified by: limin
- * @Last Modified time: 2018-09-30 10:25:43
+ * @Last Modified time: 2018-11-05 15:34:34
  */
 import { setSession, getSession, removeSession, get, set, remove } from '@/common/src/storage'
 import * as Consts from '@/common/src/const'
@@ -179,6 +179,7 @@ export default {
     Vue.prototype.$color_to_rgb = colorToRgb
     Vue.prototype.$client_height = ClientHeight
     Vue.prototype.$http = GlAxios
+    Vue.prototype.$get_session_common_config = GetCommonConfig
   }
 }
 export {
