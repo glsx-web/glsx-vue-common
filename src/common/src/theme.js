@@ -2,70 +2,55 @@
  * @Author: limin
  * @Date: 2018-08-12 12:52:19
  * @Last Modified by: limin
- * @Last Modified time: 2018-09-01 14:29:09
+ * @Last Modified time: 2018-11-13 20:08:07
  */
-const Theme = (version = '2.4.0', defaultColor = '#409EFF') => {
+const Theme = function(version = '2.4.0', defaultColor = '#409EFF') {
   this.default_color = defaultColor
   this.color = ''
   this.version = version
-  this.chalk = ''
   this.url = `https://unpkg.com/element-ui@${version}/lib/theme-chalk/index.css`
-  this.originalCluster = getThemeCluster(defaultColor)
+  // this.css = require('../../../static/theme-chalk.txt')
+  appendStyle(this.url)
 }
-const change = (val, oldVal = this.default_color) => {
-  if (typeof val !== 'string') return
-  const themeCluster = getThemeCluster(val)
-  // const originalCluster = getThemeCluster(oldVal)
-  const styleTag = document.getElementById('chalk-style')
-  const getHandler = (variable, id) => {
-    return () => {
-      // const originalCluster = getThemeCluster(this.default_color)
-      // const styleTag = document.getElementById(id)
+const change = function(val, oldVal = this.default_color) {
+  if (typeof val !== 'string' || val === oldVal) return
+  const _this = this
+  var styleTag = document.getElementById('chalk-style')
+  const getHandler = function(variable, id) {
+    return function() {
+      const themeCluster = getThemeCluster(val)
+      const originalCluster = getThemeCluster(oldVal)
       const chalk = styleTag.innerText
-      // const originalCluster = getThemeCluster(this.color)
-      const newStyle = updateStyle(chalk, this.originalCluster, themeCluster)
-      // if (!styleTag) {
-      //   styleTag = document.createElement('style')
-      //   styleTag.setAttribute('id', id)
-      //   document.head.appendChild(styleTag)
-      // }
+      const newStyle = updateStyle(chalk, originalCluster, themeCluster)
       styleTag.innerText = newStyle
+      _this.default_color = val
     }
   }
-
   const chalkHandler = getHandler('chalk', 'chalk-style')
-  if (!styleTag) {
-    // getCSSString(this.url, chalkHandler, 'chalk')
-    const styles = [...document.querySelectorAll('style')]
-    styles.forEach(style => {
-      const { innerText } = style
-      if (typeof innerText === 'string' && new RegExp(oldVal, 'i').test(innerText) && !/Chalk Variables/.test(innerText)) {
-        // this.chalk += innerText.replace(/@font-face{[^}]+}/, '')
-        style.innerText = updateStyle(innerText, this.originalCluster, themeCluster)
-        style.setAttribute('id', 'chalk-style')
-      }
-    })
-  } else {
-    chalkHandler()
-  }
-  this.originalCluster = themeCluster
-  // const styles = [...document.querySelectorAll('style')]
-  //   .filter(style => {
-  //     const text = style.innerText
-  //     return new RegExp(oldVal, 'i').test(text) && !/Chalk Variables/.test(text)
-  //   })
-  // styles.forEach(style => {
-  //   const { innerText } = style
-  //   if (typeof innerText === 'string' && new RegExp(oldVal, 'i').test(innerText) && !/Chalk Variables/.test(innerText)) {
-  //     this.chalk += innerText
-  //     style.innerText = updateStyle(innerText, originalCluster, themeCluster)
-  //   }
-  //   // if (typeof innerText !== 'string') return
-  //   // style.innerText = updateStyle(innerText, originalCluster, themeCluster)
-  // })
+  // if (!styleTag) {
+  //   // getCSSString(this.css).then(css => {
+  //   styleTag = document.createElement('style')
+  //   styleTag.innerText = this.css
+  //   styleTag.setAttribute('id', 'chalk-style')
+  //   document.head.appendChild(styleTag)
+  //   chalkHandler()
+  //   // })
+  // } else {
+  var i = setInterval(function() {
+    styleTag = document.getElementById('chalk-style')
+    if (styleTag) {
+      clearInterval(i)
+      chalkHandler()
+    }
+  }, 100)
 }
-
-const updateStyle = (style, oldCluster, newCluster) => {
+// const appendStyle = function(css) {
+//   var styleTag = document.createElement('style')
+//   styleTag.innerText = css
+//   styleTag.setAttribute('id', 'chalk-style')
+//   document.head.appendChild(styleTag)
+// }
+const updateStyle = function(style, oldCluster, newCluster) {
   let newStyle = style
   oldCluster.forEach((color, index) => {
     newStyle = newStyle.replace(new RegExp(color, 'ig'), newCluster[index])
@@ -73,19 +58,35 @@ const updateStyle = (style, oldCluster, newCluster) => {
   return newStyle
 }
 
-// const getCSSString = (url, callback, variable) => {
-//   const xhr = new XMLHttpRequest()
-//   xhr.onreadystatechange = () => {
-//     if (xhr.readyState === 4 && xhr.status === 200) {
-//       this[variable] = xhr.responseText.replace(/@font-face{[^}]+}/, '')
-//       callback()
-//     }
-//   }
-//   xhr.open('GET', url)
-//   xhr.send()
-// }
+const appendStyle = function(url, call) {
+  var styleTag = document.getElementById('chalk-style')
+  if (!styleTag) {
+    getCSSString(url).then(css => {
+      styleTag = document.createElement('style')
+      styleTag.innerText = css
+      styleTag.setAttribute('id', 'chalk-style')
+      document.head.appendChild(styleTag)
+      call && call()
+    })
+  }
+  call && call()
+}
 
-const getThemeCluster = (theme) => {
+const getCSSString = function(url) {
+  return new Promise(resolve => {
+    const xhr = new XMLHttpRequest()
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        const css = xhr.responseText.replace(/@font-face{[^}]+}/, '')
+        resolve(css)
+      }
+    }
+    xhr.open('GET', url)
+    xhr.send()
+  })
+}
+
+const getThemeCluster = function(theme) {
   theme = theme.replace('#', '')
   const tintColor = (color, tint) => {
     let red = parseInt(color.slice(0, 2), 16)
@@ -107,7 +108,7 @@ const getThemeCluster = (theme) => {
     }
   }
 
-  const shadeColor = (color, shade) => {
+  const shadeColor = function(color, shade) {
     let red = parseInt(color.slice(0, 2), 16)
     let green = parseInt(color.slice(2, 4), 16)
     let blue = parseInt(color.slice(4, 6), 16)
