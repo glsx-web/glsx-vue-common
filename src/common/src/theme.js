@@ -2,9 +2,9 @@
  * @Author: limin
  * @Date: 2018-08-12 12:52:19
  * @Last Modified by: limin
- * @Last Modified time: 2018-11-13 20:08:07
+ * @Last Modified time: 2018-11-14 15:16:10
  */
-const Theme = function(version = '2.4.0', defaultColor = '#409EFF') {
+const Theme = function(version = '2.4.1', defaultColor = '#409EFF') {
   this.default_color = defaultColor
   this.color = ''
   this.version = version
