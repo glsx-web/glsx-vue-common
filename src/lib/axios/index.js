@@ -2,7 +2,7 @@
  * @Author: limin
  * @Date: 2018-06-25 10:28:18
  * @Last Modified by: limin
- * @Last Modified time: 2018-10-29 17:13:01
+ * @Last Modified time: 2018-11-26 16:57:29
  */
 import axios from 'axios'
 // import { ResInSession } from '@/utils/cache'
@@ -27,7 +27,7 @@ service.interceptors.request.use(config => {
       return qs.stringify(data)
     }]
     // const resources = GetConfigByKey(AppConst.Auth.Resources.Key) //TODO URL鉴权
-    if (!whiteList.some(url => url === config.url)) {
+    if (!whiteList.some(url => url === config.url) && !config.url.endsWith('admin-operating-auth/menu/findTree')) {
       // 拦截请求
       return Promise.reject({
         message: `${config.url} 无访问权限，请联管理员`
@@ -47,6 +47,9 @@ service.interceptors.response.use(
     const res = response.data
     const code = res[result.code_key || 'returnCode'] // 返回值状态码
     const errId = res[result.errId || 'errId']
+    if (+errId === -200) {
+      return service(response.config)
+    }
     if (+code !== +result.code_success_value) { // 比对配置的成功状态码与返回状态码 如果不成功 则读取配置的错误信息映射
       const cmm = result.code_message_map
       const msg = cmm[errId] || cmm[code] || res[result.message_key || 'message'] || '返回错误'
