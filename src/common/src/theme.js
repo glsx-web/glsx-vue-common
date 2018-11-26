@@ -2,13 +2,13 @@
  * @Author: limin
  * @Date: 2018-08-12 12:52:19
  * @Last Modified by: limin
- * @Last Modified time: 2018-11-14 15:16:10
+ * @Last Modified time: 2018-11-26 19:06:06
  */
 const Theme = function(version = '2.4.1', defaultColor = '#409EFF') {
   this.default_color = defaultColor
   this.color = ''
   this.version = version
-  this.url = `https://unpkg.com/element-ui@${version}/lib/theme-chalk/index.css`
+  this.url = ` http://192.168.3.171:7300/mock/5be17454f31545347559d499/config/index.css`
   // this.css = require('../../../static/theme-chalk.txt')
   appendStyle(this.url)
 }
@@ -77,7 +77,7 @@ const getCSSString = function(url) {
     const xhr = new XMLHttpRequest()
     xhr.onreadystatechange = () => {
       if (xhr.readyState === 4 && xhr.status === 200) {
-        const css = xhr.responseText.replace(/@font-face{[^}]+}/, '')
+        const css = JSON.parse(xhr.responseText).data.replace(/@font-face{[^}]+}/, '')
         resolve(css)
       }
     }
